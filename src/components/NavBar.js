@@ -1,24 +1,19 @@
 import React, { Fragment, useContext } from "react";
 import { HiSearch } from "react-icons/hi";
-import { useState } from "react";
+// import { useState } from "react";
 import { Routes, Route, NavLink } from "react-router-dom";
-import MoviesList from "./MoviesList";
-import Trending from "./Trending";
-import Favourites from "./Favourites";
-import MovieDetail from "./MovieDetail";
+// import MoviesList from "./MoviesList";
+// import Trending from "./Trending";
+// import Favourites from "./Favourites";
+// import MovieDetail from "./MovieDetail";
 // import { favouriteList } from "./AddFavourites";
 import { MovieContext } from "../contexts/MovieContext";
-// import { MovieProvider } from "../contexts/MovieContext";
 
 function NavBar() {
-  // const { favouriteList, addFavourite, removeFavourite } =
-  //   useContext(MovieProvider);
-  // const { favouriteList, addFavourite, removeFavourite } =
-  //   useContext(MovieContext);
-  const [toggle, setToggle] = useState(true);
+  // const [toggle, setToggle] = useState(true);
   // const [inputValue, setInputValue] = useState("");
 
-  const { inputValue, setInputValue } = useContext(MovieContext);
+  const { setInputValue, toggle } = useContext(MovieContext);
 
   // const favouriteList = [];
 

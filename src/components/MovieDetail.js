@@ -9,7 +9,7 @@ import NoImage from "../NoImage.jpg";
 // import { NavLink } from "react-router-dom";
 import { TMDB_KEY, IMAGE_BASE_URL } from "../app/config";
 import apiService from "../app/apiService";
-import { Routes, Route, NavLink, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { useParams } from "react-router-dom";
 
 function MovieDetail() {
@@ -29,7 +29,7 @@ function MovieDetail() {
 
   const { toggle, inputValue, addFavourite } = useContext(MovieContext);
 
-  const [movieData, setMovieData] = useState("");
+  // const [movieData, setMovieData] = useState("");
 
   const playTrailer = (title) => {
     setMovieTitle(title);
@@ -76,7 +76,7 @@ function MovieDetail() {
         // response.data.release_date
 
         console.log("response.data", response.data);
-        setMovieData(response.data);
+        // setMovieData(response.data);
         setTitle(response.data.title);
         setGenres(getMovieGenres(response.data.genres));
         setReleaseDate(response.data.release_date);

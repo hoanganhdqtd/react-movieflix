@@ -22,9 +22,10 @@ function Favourites() {
     movieTitle,
     trailer,
     setTrailer,
+    toggle,
   } = useContext(MovieContext);
 
-  const [toggle, setToggle] = useState(true);
+  // const [toggle, setToggle] = useState(true);
   // const [trailer, setTrailer] = useState(true);
   // const [movieTitle, setMovieTitle] = useState("");
 

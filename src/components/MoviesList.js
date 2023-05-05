@@ -7,20 +7,9 @@ import { MdOutlineFavorite } from "react-icons/md";
 import NoImage from "../NoImage.jpg";
 import Trailers from "./Trailers";
 import { MovieContext } from "../contexts/MovieContext";
-import { NavLink, Routes, Route, Navigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 // import { useNavigation } from "@react-navigation/native";
-import MovieDetail from "./MovieDetail";
-
-// You rendered descendant <Routes>
-// (or called `useRoutes()`) at "/"
-// (under <Route path="/">) but the parent route path
-// has no trailing "*". This means if you navigate deeper,
-// the parent won't match anymore and therefore the child
-// routes will never render.
-
-// Please change the parent <Route path="/"> to <Route path="*">.
-
-// No routes matched location "/detail/502356"
+// import MovieDetail from "./MovieDetail";
 
 function MoviesList() {
   const {
@@ -34,10 +23,10 @@ function MoviesList() {
     trailer,
     setTrailer,
     isLoading,
-    setIsLoading,
+    toggle,
   } = useContext(MovieContext);
 
-  const [toggle, setToggle] = useState(true);
+  // const [toggle, setToggle] = useState(true);
   // const [movies, setMovies] = useState([]);
   // const [trailer, setTrailer] = useState(true);
   // const [movieTitle, setMovieTitle] = useState("");
