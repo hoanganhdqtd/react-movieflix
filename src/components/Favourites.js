@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useEffect } from "react";
 import { AiFillPlayCircle, AiOutlineClose } from "react-icons/ai";
 import { MdOutlineFavorite } from "react-icons/md";
 import Trailers from "./Trailers";

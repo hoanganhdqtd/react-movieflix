@@ -11,7 +11,7 @@ import Trailers from "./Trailers";
 
 import { NavLink } from "react-router-dom";
 // import {Routes, Route} from "react-router-dom";
-import MovieDetail from "./MovieDetail";
+// import MovieDetail from "./MovieDetail";
 
 function Trending() {
   const {
@@ -33,6 +33,7 @@ function Trending() {
   const apiEndpoint = inputValue ? "search/movie" : "trending/all/day";
 
   const getTrending = async () => {
+    setIsLoading(false);
     try {
       const response = await apiService.get(`${apiEndpoint}`, {
         params: {
