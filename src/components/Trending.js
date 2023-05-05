@@ -33,7 +33,7 @@ function Trending() {
   const apiEndpoint = inputValue ? "search/movie" : "trending/all/day";
 
   const getTrending = async () => {
-    setIsLoading(false);
+    setIsLoading(true);
     try {
       const response = await apiService.get(`${apiEndpoint}`, {
         params: {
