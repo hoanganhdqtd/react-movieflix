@@ -36,6 +36,10 @@ function Favourites() {
 
   console.log("favouriteList", typeof favouriteList);
 
+  // useEffect(() => {
+  //   getMovies();
+  // }, [inputValue]);
+
   useEffect(() => {
     getMovies();
   }, [inputValue]);

@@ -49,6 +49,7 @@ function Trending() {
     }
     setIsLoading(false);
   };
+
   useEffect(() => {
     getTrending();
   }, [inputValue]);
