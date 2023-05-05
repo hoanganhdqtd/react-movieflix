@@ -9,7 +9,8 @@ import NoImage from "../NoImage.jpg";
 import { MovieContext } from "../contexts/MovieContext";
 import Trailers from "./Trailers";
 
-import { NavLink, Routes, Route } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+// import {Routes, Route} from "react-router-dom";
 import MovieDetail from "./MovieDetail";
 
 function Trending() {

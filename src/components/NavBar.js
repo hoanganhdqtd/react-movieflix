@@ -1,7 +1,9 @@
 import React, { Fragment, useContext } from "react";
 import { HiSearch } from "react-icons/hi";
 // import { useState } from "react";
-import { Routes, Route, NavLink } from "react-router-dom";
+// import { Routes, Route } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+
 // import MoviesList from "./MoviesList";
 // import Trending from "./Trending";
 // import Favourites from "./Favourites";

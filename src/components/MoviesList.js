@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useContext } from "react";
 import { IMAGE_BASE_URL } from "../app/config";
 import { AiFillPlayCircle, AiOutlineClose } from "react-icons/ai";
