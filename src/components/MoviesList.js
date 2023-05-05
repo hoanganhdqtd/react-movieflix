@@ -111,7 +111,6 @@ function MoviesList() {
             />
           </div>
         )}
-        }
       </div>
     </Fragment>
   );
