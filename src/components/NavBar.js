@@ -3,32 +3,30 @@ import { HiSearch } from "react-icons/hi";
 // import { useState } from "react";
 // import { Routes, Route } from "react-router-dom";
 import { NavLink } from "react-router-dom";
+import { FaBars, FaTimes } from "react-icons/fa";
+import { useRef } from "react";
 
-// import MoviesList from "./MoviesList";
-// import Trending from "./Trending";
-// import Favourites from "./Favourites";
-// import MovieDetail from "./MovieDetail";
-// import { favouriteList } from "./AddFavourites";
 import { MovieContext } from "../contexts/MovieContext";
 
 function NavBar() {
   // const [toggle, setToggle] = useState(true);
-  // const [inputValue, setInputValue] = useState("");
 
-  const { setInputValue, toggle } = useContext(MovieContext);
+  const { inputValue, handleInput, toggle } = useContext(MovieContext);
 
-  // const favouriteList = [];
+  const navRef = useRef();
 
-  const handleInput = (e) => {
-    setInputValue(e.target.value);
+  const showNavBar = () => {
+    console.log("navRef.current", navRef.current);
+    navRef.current.classList.toggle("responsive-nav");
   };
+
   return (
     <Fragment>
-      <nav id={toggle ? "" : "navBarColor"}>
-        <div className="nav-options">
-          <NavLink to="/">
-            <h1 id={toggle ? "" : "heading"}>MovieFlix</h1>
-          </NavLink>
+      <header id={toggle ? "" : "navBarColor"}>
+        <NavLink to="/">
+          <h1 id={toggle ? "" : "heading"}>MovieFlix</h1>
+        </NavLink>
+        <nav id="nav-options" ref={navRef}>
           <NavLink
             to="/"
             // style={({ isActive }) => {
@@ -62,23 +60,32 @@ function NavBar() {
           >
             <span>Favourites</span>
           </NavLink>
-        </div>
+
+          <button className="nav-btn nav-close-btn" onClick={showNavBar}>
+            <FaTimes />
+          </button>
+        </nav>
+
+        <button className="nav-btn" onClick={showNavBar}>
+          <FaBars />
+        </button>
+
         <div className="input-group">
-          <input type="text" placeholder="Search" onChange={handleInput} />
-          <HiSearch fontSize={21} id="search" />
+          <input
+            type="text"
+            placeholder="Search"
+            // onChange={handleInput}
+            onChange={(e) => handleInput(e.target.value)}
+            value={inputValue}
+          />
+          {/* <HiSearch fontSize={21} id="search" /> */}
           {/* <div id="Color-switcher" onClick={() => setToggle(!toggle)}>
               <div
                 id={toggle ? "Color-switcher-mover" : "Color-switcher-moved"}
               ></div>
             </div> */}
         </div>
-      </nav>
-      {/* <Routes>
-        <Route path="/" element={<MoviesList />} />
-        <Route path="/trending" element={<Trending />} />
-        <Route path="/favourites" element={<Favourites />} />
-        <Route path="/detail/*" element={<MovieDetail />} />
-      </Routes> */}
+      </header>
     </Fragment>
   );
 }

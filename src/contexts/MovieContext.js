@@ -15,9 +15,49 @@ export const MovieProvider = ({ children }) => {
   const [movieTitle, setMovieTitle] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  // const handleInput = (e) => {
-  //   setInputValue(e.target.value);
-  // };
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageCounts, setPageCounts] = useState({
+    total_pages: 500,
+    total_results: 10000,
+  });
+
+  // const hasNext = pageCounts.total_pages > currentPage;
+
+  const loadMoreItems = () => {
+    // if (hasNext) {
+    //   setCurrentPage((page) => page + 1);
+    // }
+
+    if (pageCounts.total_pages > currentPage) {
+      setCurrentPage((page) => page + 1);
+    }
+  };
+
+  const handleScroll = () => {
+    console.log("inside handleScroll");
+    const windowHeight =
+      "innerHeight" in window
+        ? window.innerHeight
+        : document.documentElement.offsetHeight;
+    const body = document.body;
+    const html = document.documentElement;
+    const docHeight = Math.max(
+      body.scrollHeight,
+      body.offsetHeight,
+      html.clientHeight,
+      html.scrollHeight,
+      html.offsetHeight
+    );
+    const windowBottom = windowHeight + window.pageYOffset;
+    if (windowBottom >= docHeight - 1) {
+      loadMoreItems();
+    }
+  };
+
+  const handleInput = (searchTerm) => {
+    setInputValue(searchTerm);
+    setCurrentPage(1);
+  };
 
   const addFavourite = (movie) => {
     if (
@@ -53,11 +93,24 @@ export const MovieProvider = ({ children }) => {
         params: {
           api_key: TMDB_KEY,
           query: inputValue,
+          page: currentPage,
         },
       });
       console.log("movies", response);
       console.log(response.data.results);
-      setMovies(response.data.results);
+      // setMovies(response.data.results);
+
+      setMovies((prevResults) =>
+        currentPage === 1
+          ? response.data.results
+          : [...prevResults, ...response.data.results]
+      );
+
+      const { total_pages, total_results } = response.data;
+      setPageCounts({
+        total_pages,
+        total_results,
+      });
     } catch (e) {
       console.log(e);
     }
@@ -84,9 +137,16 @@ export const MovieProvider = ({ children }) => {
         toggle,
         inputValue,
         setInputValue,
+        handleInput,
+        handleScroll,
+        currentPage,
+        setCurrentPage,
+        pageCounts,
+        setPageCounts,
         getMovieTitle,
         getMovies,
         movies,
+        setMovies,
         playTrailer,
         movieTitle,
         setMovieTitle,

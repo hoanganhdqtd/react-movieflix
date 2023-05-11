@@ -1,13 +1,15 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { AiFillPlayCircle, AiOutlineClose } from "react-icons/ai";
-import { MdOutlineFavorite } from "react-icons/md";
+import { MdOutlineFavorite, MdOutlineRemoveCircle } from "react-icons/md";
+import { Grid } from "@mui/material";
 import Trailers from "./Trailers";
 import NoImage from "../NoImage.jpg";
 import { useContext } from "react";
 import { MovieContext } from "../contexts/MovieContext";
 import { IMAGE_BASE_URL } from "../app/config";
 import { NavLink, Routes, Route } from "react-router-dom";
-import MovieDetail from "./MovieDetail";
+import Popover from "@mui/material/Popover";
+import Typography from "@mui/material/Typography";
 
 function Favourites() {
   const {
@@ -17,6 +19,7 @@ function Favourites() {
     removeFavourite,
     movies,
     getMovies,
+    currentPage,
     getMovieTitle,
     playTrailer,
     movieTitle,
@@ -34,7 +37,17 @@ function Favourites() {
 
   // const apiEndpoint = "search/movie";
 
-  console.log("favouriteList", typeof favouriteList);
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handlePopoverOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
 
   // useEffect(() => {
   //   getMovies();
@@ -42,7 +55,7 @@ function Favourites() {
 
   useEffect(() => {
     getMovies();
-  }, [inputValue]);
+  }, [inputValue, currentPage]);
 
   if (!inputValue) {
     return (
@@ -53,16 +66,41 @@ function Favourites() {
               No movies added yet. Please pick some.
             </h1>
           ) : (
-            <div className="movies-container">
+            <Grid container spacing={2} mt={1}>
               {favouriteList.map((movie) => (
-                <Fragment key={movie.id}>
+                <Grid key={movie.id} item xs={6} md={4} lg={4}>
                   <div id={trailer ? "container" : "NoContainer"}>
-                    <MdOutlineFavorite
+                    <MdOutlineRemoveCircle
                       id={trailer ? "likeIcon" : "hide"}
                       fontSize={40}
                       color="red"
                       onClick={() => removeFavourite(movie)}
-                    />
+                      onMouseEnter={handlePopoverOpen}
+                      onMouseLeave={handlePopoverClose}
+                    >
+                      <Popover
+                        id="mouse-over-popover"
+                        sx={{
+                          pointerEvents: "none",
+                        }}
+                        open={open}
+                        anchorEl={anchorEl}
+                        anchorOrigin={{
+                          vertical: "bottom",
+                          horizontal: "left",
+                        }}
+                        transformOrigin={{
+                          vertical: "top",
+                          horizontal: "left",
+                        }}
+                        onClose={handlePopoverClose}
+                        disableRestoreFocus
+                      >
+                        <Typography sx={{ p: 1 }}>
+                          Remove from favourites
+                        </Typography>
+                      </Popover>
+                    </MdOutlineRemoveCircle>
                     <AiFillPlayCircle
                       color="green"
                       fontSize={40}
@@ -88,6 +126,7 @@ function Favourites() {
                     </h3> */}
                     <NavLink to={{ pathname: `/detail/${movie.id}` }}>
                       <img
+                        style={{ width: "100%", borderRadius: "18px" }}
                         src={
                           movie.poster_path
                             ? `${IMAGE_BASE_URL}${movie.poster_path}`
@@ -112,14 +151,14 @@ function Favourites() {
                       </h3>
                     </NavLink>
 
-                    <Routes>
+                    {/* <Routes>
                       <Route
                         to={`/detail/${movie.id}`}
                         element={<MovieDetail movie={movie} />}
                       />
-                    </Routes>
+                    </Routes> */}
                   </div>
-                </Fragment>
+                </Grid>
               ))}
               {!trailer && <Trailers movieTitle={movieTitle} toggle={toggle} />}
               <AiOutlineClose
@@ -130,7 +169,7 @@ function Favourites() {
                 cursor={"pointer"}
                 onClick={() => setTrailer(true)}
               />
-            </div>
+            </Grid>
           )}
         </div>
       </Fragment>
@@ -142,9 +181,9 @@ function Favourites() {
           {!movies.length ? (
             <h1 style={{ textAlign: "center" }}>No results</h1>
           ) : (
-            <div className="movies-container">
+            <Grid container spacing={2} mt={1}>
               {movies.map((movie) => (
-                <Fragment key={movie.id}>
+                <Grid key={movie.id} item xs={6} md={4} lg={4}>
                   <div id={trailer ? "container" : "NoContainer"}>
                     <MdOutlineFavorite
                       id={trailer ? "likeIcon" : "hide"}
@@ -158,11 +197,10 @@ function Favourites() {
                       id={trailer ? "playIcon" : "hide"}
                       onClick={() => playTrailer(movie)}
                     />
-                    <NavLink
-                      to={{ pathname: `/detail/${movie.id}` }}
-                      // style={{ textDecoration: "none !important" }}
-                    >
+
+                    <NavLink to={{ pathname: `/detail/${movie.id}` }}>
                       <img
+                        style={{ width: "100%", borderRadius: "18px" }}
                         src={
                           movie.poster_path
                             ? `${IMAGE_BASE_URL}${movie.poster_path}`
@@ -179,20 +217,22 @@ function Favourites() {
                             : "larger-Text"
                         }
                       >
-                        {getMovieTitle(movie).length > 40
-                          ? getMovieTitle(movie).slice(0, 40) + "..."
-                          : getMovieTitle(movie)}
+                        <span className="movie-content">
+                          {getMovieTitle(movie).length > 40
+                            ? getMovieTitle(movie).slice(0, 40) + "..."
+                            : getMovieTitle(movie)}
+                        </span>
                       </h3>
                     </NavLink>
 
-                    <Routes>
+                    {/* <Routes>
                       <Route
                         to={`/detail/${movie.id}`}
                         element={<MovieDetail movie={movie} />}
                       />
-                    </Routes>
+                    </Routes> */}
                   </div>
-                </Fragment>
+                </Grid>
               ))}
               {!trailer && <Trailers movieTitle={movieTitle} toggle={toggle} />}
               <AiOutlineClose
@@ -203,7 +243,7 @@ function Favourites() {
                 cursor={"pointer"}
                 onClick={() => setTrailer(true)}
               />
-            </div>
+            </Grid>
           )}
         </div>
       </Fragment>

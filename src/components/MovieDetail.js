@@ -9,12 +9,13 @@ import NoImage from "../NoImage.jpg";
 // import { NavLink } from "react-router-dom";
 import { TMDB_KEY, IMAGE_BASE_URL } from "../app/config";
 import apiService from "../app/apiService";
-import { Routes, Route } from "react-router-dom";
-import { useParams } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 function MovieDetail() {
-  const movieId = useParams().movieId;
-  console.log("movieId", movieId);
+  const navigate = useNavigate();
+  const { movieId } = useParams();
+
   const [trailer, setTrailer] = useState(true);
   const [movieTitle, setMovieTitle] = useState("");
   const [movieSearch, setMovieSearch] = useState([]);
@@ -26,8 +27,10 @@ function MovieDetail() {
   const [voteAverage, setVoteAverage] = useState("");
   const [voteCount, setVoteCount] = useState("");
   const [newMovieId, setNewMovieId] = useState("");
+  const [movieOverview, setMovieOverview] = useState("");
 
-  const { toggle, inputValue, addFavourite } = useContext(MovieContext);
+  const { toggle, inputValue, setInputValue, addFavourite } =
+    useContext(MovieContext);
 
   // const [movieData, setMovieData] = useState("");
 
@@ -84,6 +87,8 @@ function MovieDetail() {
         setVoteAverage(response.data.vote_average);
         setVoteCount(response.data.vote_count);
         setNewMovieId(response.data.id);
+        setMovieOverview(response.data.overview);
+        setInputValue("");
         return response.data;
       } catch (e) {
         console.log(e);
@@ -91,7 +96,7 @@ function MovieDetail() {
     };
 
     getMovieDetail();
-  }, []);
+  }, [newMovieId]);
 
   const addFavouriteById = async (movieId) => {
     try {
@@ -134,13 +139,13 @@ function MovieDetail() {
                 <div id={trailer ? "container" : "NoContainer"}>
                   <MdOutlineFavorite
                     id={trailer ? "likeIcon" : "hide"}
-                    fontSize={40}
+                    fontSize={30}
                     color="red"
                     onClick={() => addFavourite(movie)}
                   />
                   <AiFillPlayCircle
                     color="green"
-                    fontSize={40}
+                    fontSize={30}
                     id={trailer ? "playIcon" : "hide"}
                     onClick={() => playTrailer(title)}
                   />
@@ -151,6 +156,10 @@ function MovieDetail() {
                         : NoImage
                     }
                     alt={movie.title}
+                    onClick={() => {
+                      navigate(`/detail/${movie.id}`);
+                      setNewMovieId(movie.id);
+                    }}
                     // onClick={() => playTrailer(movie)}
                   />
                   <div id="movie-title">
@@ -164,12 +173,6 @@ function MovieDetail() {
                     </h3>
                   </div>
                 </div>
-                <Routes>
-                  <Route
-                    to={`/detail/${movie.id}`}
-                    element={<MovieDetail movie={movie} />}
-                  />
-                </Routes>
                 {/* <Routes>
                   <Route
                     element={<Navigate to=<MovieDetail movie={movie} /> />}
@@ -201,23 +204,26 @@ function MovieDetail() {
     <div className="movies-container-detail">
       <Fragment>
         <div id={trailer ? "container" : "NoContainer"}>
-          <MdOutlineFavorite
-            id={trailer ? "likeIcon-detail" : "hide"}
-            fontSize={40}
-            color="red"
-            onClick={() => addFavouriteById(movieId)}
-          />
-          <AiFillPlayCircle
-            color="green"
-            fontSize={40}
-            id={trailer ? "playIcon-detail" : "hide"}
-            onClick={() => playTrailer()}
-          />
-          <img
-            src={imgSrc}
-            alt={title}
-            // onClick={() => playTrailer(movie)}
-          />
+          <div style={{ textAlign: "center", position: "relative" }}>
+            <img
+              src={imgSrc}
+              alt={title}
+              // onClick={() => playTrailer(movie)}
+            />
+            <MdOutlineFavorite
+              id={trailer ? "likeIcon-detail" : "hide"}
+              fontSize={30}
+              color="red"
+              onClick={() => addFavouriteById(movieId)}
+            />
+            <AiFillPlayCircle
+              color="green"
+              fontSize={30}
+              id={trailer ? "playIcon-detail" : "hide"}
+              onClick={() => playTrailer(title)}
+            />
+          </div>
+
           <div id="movie-title">
             <h3
               className={toggle ? "DarkTheme" : "LightThemeClose"}
@@ -253,6 +259,13 @@ function MovieDetail() {
             >
               <span id="movie-tag">Vote count:</span>{" "}
               <span id="movie-description">{voteCount}</span>
+            </h4>
+            <h4
+              className={toggle ? "DarkTheme" : "LightThemeClose"}
+              // id={getMovieTitle(movie).length > 28 ? "smaller-Text" : ""}
+            >
+              <span id="movie-tag">Overview:</span>{" "}
+              <span id="movie-description">{movieOverview}</span>
             </h4>
           </div>
         </div>

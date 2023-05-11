@@ -10,6 +10,7 @@ import { MovieContext } from "../contexts/MovieContext";
 import Trailers from "./Trailers";
 
 import { NavLink } from "react-router-dom";
+import { Grid } from "@mui/material";
 // import {Routes, Route} from "react-router-dom";
 // import MovieDetail from "./MovieDetail";
 
@@ -29,6 +30,43 @@ function Trending() {
   const [trendingTitle, setTrendingTitle] = useState("");
   // const [trailer, setTrailer] = useState(true);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageCounts, setPageCounts] = useState({
+    total_pages: 1000,
+    total_results: 20000,
+  });
+
+  const loadMoreItems = () => {
+    // just set the page, the effect will respond to it
+    console.log("loadMoreItems");
+    console.log("pageCounts.total_pages", pageCounts.total_pages);
+    console.log("currentPage", currentPage);
+    if (pageCounts.total_pages > currentPage) {
+      setCurrentPage((page) => page + 1);
+    }
+  };
+
+  const handleScroll = () => {
+    console.log("inside handleScroll");
+    const windowHeight =
+      "innerHeight" in window
+        ? window.innerHeight
+        : document.documentElement.offsetHeight;
+    const body = document.body;
+    const html = document.documentElement;
+    const docHeight = Math.max(
+      body.scrollHeight,
+      body.offsetHeight,
+      html.clientHeight,
+      html.scrollHeight,
+      html.offsetHeight
+    );
+    const windowBottom = windowHeight + window.pageYOffset;
+    if (windowBottom >= docHeight - 1) {
+      loadMoreItems();
+    }
+  };
+
   console.log("inputValue", inputValue);
   const apiEndpoint = inputValue ? "search/movie" : "trending/all/day";
 
@@ -39,11 +77,23 @@ function Trending() {
         params: {
           api_key: TMDB_KEY,
           query: inputValue,
+          page: currentPage,
         },
       });
       console.log("trending", response);
       console.log(response.data.results);
-      setTrendingMovies(response.data.results);
+      // setTrendingMovies(response.data.results);
+      setTrendingMovies((prevResults) =>
+        currentPage === 1
+          ? response.data.results
+          : [...prevResults, ...response.data.results]
+      );
+
+      const { total_pages, total_results } = response.data;
+      setPageCounts({
+        total_pages,
+        total_results,
+      });
     } catch (e) {
       console.log(e);
     }
@@ -52,7 +102,13 @@ function Trending() {
 
   useEffect(() => {
     getTrending();
-  }, [inputValue]);
+  }, [inputValue, currentPage]);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    // cleanup function
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const playTrendingTrailer = (movie) => {
     setTrendingTitle(getMovieTitle(movie));
@@ -62,14 +118,14 @@ function Trending() {
   return (
     <Fragment>
       <div className={toggle ? "mainBgColor" : "secondaryBgColor"}>
-        {isLoading ? (
+        {isLoading && currentPage === 1 ? (
           <h1 style={{ textAlign: "center" }}>Loading...</h1>
         ) : !trendingMovies.length ? (
           <h1 style={{ textAlign: "center" }}>No results</h1>
         ) : (
-          <div className="movies-container">
+          <Grid container spacing={2} mt={1}>
             {trendingMovies.map((movie) => (
-              <Fragment key={movie.id}>
+              <Grid key={movie.id} item xs={6} md={4} lg={4}>
                 <div id={trailer ? "container" : "NoContainer"}>
                   <MdOutlineFavorite
                     id={trailer ? "likeIcon" : "hide"}
@@ -88,6 +144,7 @@ function Trending() {
                     // style={{ textDecoration: "none !important" }}
                   >
                     <img
+                      style={{ width: "100%", borderRadius: "18px" }}
                       src={
                         movie.poster_path
                           ? `${IMAGE_BASE_URL}${movie.poster_path}`
@@ -117,7 +174,7 @@ function Trending() {
                     />
                   </Routes> */}
                 </div>
-              </Fragment>
+              </Grid>
             ))}
             {!trailer && (
               <Trailers movieTitle={trendingTitle} toggle={toggle} />
@@ -130,7 +187,7 @@ function Trending() {
               cursor={"pointer"}
               onClick={() => setTrailer(true)}
             />
-          </div>
+          </Grid>
         )}
       </div>
     </Fragment>
