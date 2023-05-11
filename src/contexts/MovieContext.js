@@ -34,7 +34,6 @@ export const MovieProvider = ({ children }) => {
   };
 
   const handleScroll = () => {
-    console.log("inside handleScroll");
     const windowHeight =
       "innerHeight" in window
         ? window.innerHeight
@@ -96,8 +95,7 @@ export const MovieProvider = ({ children }) => {
           page: currentPage,
         },
       });
-      console.log("movies", response);
-      console.log(response.data.results);
+
       // setMovies(response.data.results);
 
       setMovies((prevResults) =>

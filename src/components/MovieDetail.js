@@ -74,11 +74,10 @@ function MovieDetail() {
             api_key: TMDB_KEY,
           },
         });
-        console.log("Movie detail", response);
+
         // response.data.title, response.data.genres,
         // response.data.release_date
 
-        console.log("response.data", response.data);
         // setMovieData(response.data);
         setTitle(response.data.title);
         setGenres(getMovieGenres(response.data.genres));
@@ -107,9 +106,6 @@ function MovieDetail() {
           api_key: TMDB_KEY,
         },
       });
-      console.log("Movie detail", response);
-
-      console.log("response.data", response.data);
 
       addFavourite(response.data);
 

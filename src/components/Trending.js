@@ -38,9 +38,7 @@ function Trending() {
 
   const loadMoreItems = () => {
     // just set the page, the effect will respond to it
-    console.log("loadMoreItems");
-    console.log("pageCounts.total_pages", pageCounts.total_pages);
-    console.log("currentPage", currentPage);
+
     if (pageCounts.total_pages > currentPage) {
       setCurrentPage((page) => page + 1);
     }
@@ -80,8 +78,7 @@ function Trending() {
           page: currentPage,
         },
       });
-      console.log("trending", response);
-      console.log(response.data.results);
+
       // setTrendingMovies(response.data.results);
       setTrendingMovies((prevResults) =>
         currentPage === 1

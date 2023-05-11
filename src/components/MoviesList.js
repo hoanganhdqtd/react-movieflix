@@ -9,21 +9,6 @@ import Trailers from "./Trailers";
 import { MovieContext } from "../contexts/MovieContext";
 import { NavLink } from "react-router-dom";
 import Grid from "@mui/material/Grid";
-import { experimentalStyled as styled } from "@mui/material/styles";
-import Paper from "@mui/material/Paper";
-// import { useNavigation } from "@react-navigation/native";
-// import MovieDetail from "./MovieDetail";
-
-import apiService from "../app/apiService";
-import { TMDB_KEY } from "../app/config";
-
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-  ...theme.typography.body2,
-  padding: theme.spacing(2),
-  textAlign: "center",
-  color: theme.palette.text.secondary,
-}));
 
 function MoviesList() {
   const {
@@ -49,44 +34,9 @@ function MoviesList() {
   // const [trailer, setTrailer] = useState(true);
   // const [movieTitle, setMovieTitle] = useState("");
 
-  console.log("inputValue", inputValue);
-
   useEffect(() => {
     getMovies();
   }, [inputValue, currentPage]);
-
-  // const loadMoreItems = () => {
-  //   // just set the page, the effect will respond to it
-  //   console.log("loadMoreItems");
-  //   console.log("pageCounts.total_pages", pageCounts.total_pages);
-  //   console.log("currentPage", currentPage);
-  //   if (pageCounts.total_pages > currentPage) {
-  //     setCurrentPage((page) => page + 1);
-  //   }
-  // };
-
-  // const handleScroll = () => {
-  //   const windowHeight =
-  //     "innerHeight" in window
-  //       ? window.innerHeight
-  //       : document.documentElement.offsetHeight;
-  //   const body = document.body;
-  //   const html = document.documentElement;
-  //   const docHeight = Math.max(
-  //     body.scrollHeight,
-  //     body.offsetHeight,
-  //     html.clientHeight,
-  //     html.scrollHeight,
-  //     html.offsetHeight
-  //   );
-  //   const windowBottom = windowHeight + window.pageYOffset;
-  //   console.log("handleScroll");
-  //   console.log("windowBottom", windowBottom);
-  //   console.log("docHeight", docHeight);
-  //   if (windowBottom >= docHeight - 1) {
-  //     loadMoreItems();
-  //   }
-  // };
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
